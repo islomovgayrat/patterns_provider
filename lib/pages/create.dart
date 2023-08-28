@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:patterns_provider/view_model/create_view_model.dart';
+import 'package:provider/provider.dart';
 
-import '../views/item_of_create_page.dart';
+import '../models/post_model.dart';
+import 'home.dart';
 
 class CreatePage extends StatefulWidget {
   const CreatePage({super.key});
@@ -20,37 +22,63 @@ class _CreatePageState extends State<CreatePage> {
       appBar: AppBar(
         title: const Text('Create Page'),
       ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Column(
-              children: [
-                itemOfCreatePage(createViewModel,
-                    textEditingController: createViewModel.titleController,
-                    hintText: createViewModel.title),
-                itemOfCreatePage(createViewModel,
-                    textEditingController: createViewModel.bodyController,
-                    hintText: createViewModel.body),
-                itemOfCreatePage(createViewModel,
-                    textEditingController: createViewModel.userIdController,
-                    hintText: createViewModel.userId),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Create'),
-                  ),
+      body: ChangeNotifierProvider(
+        create: (BuildContext context) => createViewModel,
+        child: Consumer<CreateViewModel>(
+          builder: (ctx, model, index) => Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: TextField(
+                        controller: createViewModel.titleController,
+                        decoration: const InputDecoration(
+                          hintText: 'Title',
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: TextField(
+                        controller: createViewModel.bodyController,
+                        decoration: const InputDecoration(
+                          hintText: 'Body',
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: TextField(
+                        controller: createViewModel.userIdController,
+                        decoration: const InputDecoration(
+                          hintText: 'UserId',
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          var post = createViewModel.post;
+                          createViewModel.apiPostCreate(post!);
+                        },
+                        child: const Text('Create'),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              createViewModel.isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : const SizedBox.shrink(),
+            ],
           ),
-          createViewModel.isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : const SizedBox.shrink(),
-        ],
+        ),
       ),
     );
   }

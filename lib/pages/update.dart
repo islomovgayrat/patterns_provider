@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:patterns_provider/views/item_of_update_page.dart';
+import 'package:patterns_provider/pages/home.dart';
 
 import '../view_model/update_view_model.dart';
 
@@ -18,7 +18,7 @@ class _UpdatePageState extends State<UpdatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Page'),
+        title: const Text('Update Page'),
       ),
       body: Stack(
         children: [
@@ -26,23 +26,50 @@ class _UpdatePageState extends State<UpdatePage> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
               children: [
-                itemOfUpdatePage(updateViewModel,
-                    textEditingController: updateViewModel.idController,
-                    hintText: updateViewModel.id),
-                itemOfUpdatePage(updateViewModel,
-                    textEditingController: updateViewModel.titleController,
-                    hintText: updateViewModel.title),
-                itemOfUpdatePage(updateViewModel,
-                    textEditingController: updateViewModel.bodyController,
-                    hintText: updateViewModel.body),
-                itemOfUpdatePage(updateViewModel,
-                    textEditingController: updateViewModel.userIdController,
-                    hintText: updateViewModel.userId),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: TextField(
+                    controller: updateViewModel.idController,
+                    decoration: const InputDecoration(
+                      hintText: 'Id',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: TextField(
+                    controller: updateViewModel.titleController,
+                    decoration: const InputDecoration(
+                      hintText: 'Title',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: TextField(
+                    controller: updateViewModel.bodyController,
+                    decoration: const InputDecoration(
+                      hintText: 'Body',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: TextField(
+                    controller: updateViewModel.userIdController,
+                    decoration: const InputDecoration(
+                      hintText: 'UserId',
+                    ),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Create'),
+                    onPressed: () {
+                      var post = updateViewModel.post;
+                      updateViewModel.apiPostUpdate(post!);
+                    },
+                    child: const Text('Update'),
                   ),
                 ),
               ],
